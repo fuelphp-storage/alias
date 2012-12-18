@@ -1,0 +1,21 @@
+{
+	"name": "fuelphp/alias",
+	"type": "library",
+	"description": "Class alias resolving.",
+	"keywords": ["Alias", "Aliassing"],
+	"homepage": "https://github.com/fuelphp/alias",
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "FuelPHP Development Team",
+			"email": "team@fuelphp.com"
+		}
+	],
+	"require": {
+		"php": ">=5.3.3"
+	},
+	"autoload": {
+		"psr-0": { "Fuel\\Alias": "src/" }
+	},
+	"minimum-stability": "dev"
+}
