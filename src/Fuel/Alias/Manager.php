@@ -81,10 +81,7 @@ class Manager
 
 		foreach ($this->aliases as $resolver)
 		{
-			if ($class = $resolver->resolve($alias))
-			{
-				return $class;
-			}
+			if ($class = $resolver->resolve($alias)) return $class;
 		}
 	}
 
@@ -140,11 +137,15 @@ class Manager
 		}
 
 		if ($format)
+		{
 			$cache->format($format);
+		}
 
-		$this->cache = $cache->setManager($this)
+		$cache->setManager($this)
 			->load()
 			->register();
+
+		$this->cache = $cache;
 
 		return $this;
 	}

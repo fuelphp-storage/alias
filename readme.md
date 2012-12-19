@@ -24,7 +24,7 @@ By default the manager will prepend itself to the autoloader stack.
 
 ```
 // Create a new alias manager
-$manager = new Fuel\Alias\Manager();
+$manager = new Fuel\Alias\Manager;
 
 // Register the manager
 $manager->register();
@@ -40,6 +40,22 @@ $manager->alias(array(
 
 // 
 ```
+
+## Advanced Usage
+
+```
+$manager = new Fuel\Alias\Manager;
+
+// Alias with wildcards
+$manager->alias('Namespaced\*', 'Other\\$1');
+
+// Or even computed classes
+$manager->alias('*', function($segments){
+	return 'Namespaced\'.reset($segments);
+});
+```
+
+This can result into class resolving that doesn't exists. Luckily the package is smart enough the check wether the class exists and will continue to look for the correct class if the resolved class does not exist. This is also taken into account when it comes to caching. Only resolved classes that exist will be cached.
 
 ## Caching
 
