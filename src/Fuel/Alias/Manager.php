@@ -5,9 +5,14 @@ namespace Fuel\Alias;
 class Manager
 {
 	/**
-	 * @var  array  $aliasses  class aliasses
+	 * @var  array  $aliases  class aliases
 	 */
-	protected $aliasses = array();
+	protected $aliases = array();
+
+	/**
+	 * @var  Fuel\Alias\Cache  $cache  cache handler
+	 */
+	protected $cache;
 
 	/**
 	 * @var  array  current classes being resolved
@@ -17,7 +22,7 @@ class Manager
 	/**
 	 * Register a class alias
 	 *
-	 * @param   mixed  $pattern      class pattern or array of aliasses
+	 * @param   mixed  $pattern      class pattern or array of aliases
 	 * @param   mixed  $translation  class translation
 	 * @return  $this
 	 */
@@ -35,7 +40,7 @@ class Manager
 				$resolver = new Resolver($p, $resolver);
 			}
 
-			$this->aliasses[$p] = $resolver;
+			$this->aliases[$p] = $resolver;
 		}
 
 		return $this;
@@ -50,11 +55,11 @@ class Manager
 	 */
 	public function removeAlias($pattern, $translation = null)
 	{
-		foreach (array_keys($this->aliasses) as $i)
+		foreach (array_keys($this->aliases) as $i)
 		{
-			if ($this->aliasses[$i]->matches($pattern, $translation))
+			if ($this->aliases[$i]->matches($pattern, $translation))
 			{
-				unset($this->aliasses[$i]);
+				unset($this->aliases[$i]);
 			}
 		}
 
@@ -69,12 +74,12 @@ class Manager
 	 */
 	protected function resolveAlias($alias)
 	{
-		if (isset($this->aliasses[$alias]) and $class = $this->aliasses[$alias]->resolve($alias))
+		if (isset($this->aliases[$alias]) and $class = $this->aliases[$alias]->resolve($alias))
 		{
 			return $class;
 		}
 
-		foreach ($this->aliasses as $resolver)
+		foreach ($this->aliases as $resolver)
 		{
 			if ($class = $resolver->resolve($alias))
 			{
@@ -91,7 +96,7 @@ class Manager
 	 */
 	public function resolve($alias)
 	{
-		// Skip recursive aliasses if defined
+		// Skip recursive aliases if defined
 		if (in_array($alias, $this->resolving))
 		{
 			return false;
@@ -112,17 +117,47 @@ class Manager
 		// Create the actual alias
 		class_alias($class, $alias);
 
+		if ($this->cache)
+		{
+			$this->cache->cache($class, $alias);
+		}
+
 		return true;
+	}
+
+	/**
+	 * Set and load alias cache.
+	 *
+	 * @param   Fuel\Alias\Cache|string  $cache   cache handler or cache path
+	 * @param   string                   $format  cache format
+	 * @return  $this
+	 */
+	public function cache($cache, $format = null)
+	{
+		if ( ! $cache instanceof Cache)
+		{
+			$cache = new Cache($cache);
+		}
+
+		if ($format)
+			$cache->format($format);
+
+		$this->cache = $cache->setManager($this)
+			->load()
+			->register();
+
+		return $this;
 	}
 
 	/**
 	 * Registers the autoloader function.
 	 *
-	 * @param   bool    $prepend  wether to prepend the loader to the autoloader stack.
+	 * @param   bool    $placement  register placement, append or prepend
 	 * @return  $this
 	 */
-	public function register($prepend = true)
+	public function register($placement = 'prepend')
 	{
+		$prepend = ($placement === 'append') ? false : true;
 		spl_autoload_register(array($this, 'resolve'), true, $prepend);
 
 		return $this;
