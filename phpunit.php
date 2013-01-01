@@ -1,6 +1,6 @@
 <?php
 
-namespace Fuel\Alias;
+namespace FuelPHP\Alias;
 class Dummy {}
 
 

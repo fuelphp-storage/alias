@@ -4,8 +4,8 @@ class AliasTests extends PHPUnit_Framework_TestCase
 {
 	public function testLiteral()
 	{
-		$manager = new Fuel\Alias\Manager();
-		$manager->alias('Test','Fuel\Alias\Dummy');
+		$manager = new FuelPHP\Alias\Manager();
+		$manager->alias('Test','FuelPHP\Alias\Dummy');
 
 		$this->assertTrue($manager->resolve('Test'));
 		$this->assertFalse($manager->resolve('Unknown'));
@@ -13,9 +13,9 @@ class AliasTests extends PHPUnit_Framework_TestCase
 
 	public function testMatchedLiteral()
 	{
-		$manager = new Fuel\Alias\Manager();
+		$manager = new FuelPHP\Alias\Manager();
 		$manager->alias(array(
-			'Tester\*' => 'Fuel\Alias\Dummy',
+			'Tester\*' => 'FuelPHP\Alias\Dummy',
 		));
 
 		$this->assertTrue($manager->resolve('Tester\ThisClass'));
@@ -24,9 +24,9 @@ class AliasTests extends PHPUnit_Framework_TestCase
 
 	public function testMatchedReplacement()
 	{
-		$manager = new Fuel\Alias\Manager();
+		$manager = new FuelPHP\Alias\Manager();
 		$manager->alias(array(
-			'Test\*' => 'Fuel\Alias\$1',
+			'Test\*' => 'FuelPHP\Alias\$1',
 		));
 
 		$this->assertTrue($manager->resolve('Test\Dummy'));
@@ -35,9 +35,9 @@ class AliasTests extends PHPUnit_Framework_TestCase
 
 	public function testCallable()
 	{
-		$manager = new Fuel\Alias\Manager();
+		$manager = new FuelPHP\Alias\Manager();
 		$manager->alias(array(
-			'Tester' => function(){ return 'Fuel\Alias\Dummy'; },
+			'Tester' => function(){ return 'FuelPHP\Alias\Dummy'; },
 		));
 
 		$this->assertTrue($manager->resolve('Tester'));
@@ -46,9 +46,9 @@ class AliasTests extends PHPUnit_Framework_TestCase
 
 	public function testMatchedCallable()
 	{
-		$manager = new Fuel\Alias\Manager();
+		$manager = new FuelPHP\Alias\Manager();
 		$manager->alias(array(
-			'Tester\*' => function(){ return 'Fuel\Alias\Dummy'; },
+			'Tester\*' => function(){ return 'FuelPHP\Alias\Dummy'; },
 		));
 
 		$this->assertTrue($manager->resolve('Tester\ThisOtherClass'));
@@ -57,10 +57,10 @@ class AliasTests extends PHPUnit_Framework_TestCase
 
 	public function testCallableSegments()
 	{
-		$manager = new Fuel\Alias\Manager();
+		$manager = new FuelPHP\Alias\Manager();
 		$manager->alias(array(
 			'OtherNamespace\*' => function ($segments) {
-				return 'Fuel\Alias\\'.reset($segments);
+				return 'FuelPHP\Alias\\'.reset($segments);
 			},
 		));
 
@@ -70,29 +70,29 @@ class AliasTests extends PHPUnit_Framework_TestCase
 
 	public function testRemoveResolver()
 	{
-		$manager = new Fuel\Alias\Manager();
+		$manager = new FuelPHP\Alias\Manager();
 		$manager->alias(array(
-			'Resolvable' => 'Fuel\Alias\Dummy',
-			'ResolvableTwo' => 'Fuel\Alias\Dummy',
-			'ResolvableThree' => 'Fuel\Alias\Dummy',
-			'ResolvableFour' => 'Fuel\Alias\Dummy',
+			'Resolvable' => 'FuelPHP\Alias\Dummy',
+			'ResolvableTwo' => 'FuelPHP\Alias\Dummy',
+			'ResolvableThree' => 'FuelPHP\Alias\Dummy',
+			'ResolvableFour' => 'FuelPHP\Alias\Dummy',
 		));
 		$this->assertTrue($manager->resolve('Resolvable'));
 		$manager->removeAlias('ResolvableTwo', 'should not remove resolver');
 		$this->assertTrue($manager->resolve('ResolvableTwo'));
 		$manager->removeAlias('ResolvableThree');
 		$this->assertFalse($manager->resolve('ResolvableThree'));
-		$manager->removeAlias('ResolvableFour', 'Fuel\Alias\Dummy');
+		$manager->removeAlias('ResolvableFour', 'FuelPHP\Alias\Dummy');
 		$this->assertFalse($manager->resolve('ResolvableFour'));
 	}
 
 	public function testResolveAutoloader()
 	{
-		$manager = new Fuel\Alias\Manager();
+		$manager = new FuelPHP\Alias\Manager();
 		$manager->alias(array(
-			'Autoloaded\Dummy' => 'Fuel\Alias\Dummy',
-			'Second\Autoloaded\Dummy' => 'Fuel\Alias\Dummy',
-			'Third\Autoloaded\Dummy' => 'Fuel\Alias\Dummy',
+			'Autoloaded\Dummy' => 'FuelPHP\Alias\Dummy',
+			'Second\Autoloaded\Dummy' => 'FuelPHP\Alias\Dummy',
+			'Third\Autoloaded\Dummy' => 'FuelPHP\Alias\Dummy',
 		));
 		$this->assertFalse(class_exists('Autoloaded\Dummy', true));
 		$this->assertTrue($manager->resolve('Autoloaded\Dummy'));
@@ -104,7 +104,7 @@ class AliasTests extends PHPUnit_Framework_TestCase
 
 	public function testStopRecursion()
 	{
-		$manager = new Fuel\Alias\Manager();
+		$manager = new FuelPHP\Alias\Manager();
 		$manager->alias(array(
 			'*\*' => '$2\\$1',
 			'*' => '$1',

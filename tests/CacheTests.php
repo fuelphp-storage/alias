@@ -1,7 +1,7 @@
 <?php
 
-use Fuel\Alias\Cache;
-use Fuel\Alias\Manager;
+use FuelPHP\Alias\Cache;
+use FuelPHP\Alias\Manager;
 use Mockery as m;
 
 class CacheTests extends PHPUnit_Framework_TestCase
@@ -41,8 +41,8 @@ class CacheTests extends PHPUnit_Framework_TestCase
 	public function testRegisterCache()
 	{
 		$manager = new Manager;
-		$manager->alias('My\Alias', 'Fuel\Alias\Dummy');
-		$cache = m::mock('Fuel\\Alias\\Cache', function ($cache) use ($manager){
+		$manager->alias('My\Alias', 'FuelPHP\Alias\Dummy');
+		$cache = m::mock('FuelPHP\\Alias\\Cache', function ($cache) use ($manager){
 			$cache->shouldReceive('format')
 				->with('unwind')
 				->andReturn($cache)
@@ -54,7 +54,7 @@ class CacheTests extends PHPUnit_Framework_TestCase
 				->shouldReceive('register')
 				->andReturn($cache)
 				->shouldReceive('cache')
-				->with('Fuel\Alias\Dummy', 'My\Alias');
+				->with('FuelPHP\Alias\Dummy', 'My\Alias');
 		});
 		$manager->cache($cache, 'unwind');
 		$manager->resolve('My\Alias');
@@ -63,7 +63,7 @@ class CacheTests extends PHPUnit_Framework_TestCase
 	public function testCacheLoad()
 	{
 		$cache = new Cache(__DIR__.'/../resources/cache.test.php');
-		$manager = m::mock('Fuel\Alias\Manager');
+		$manager = m::mock('FuelPHP\Alias\Manager');
 		$manager->shouldReceive('alias')
 			->with(array(
 				'MyObject' => 'Dummy',

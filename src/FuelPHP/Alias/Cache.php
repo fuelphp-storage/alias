@@ -1,6 +1,6 @@
 <?php
 
-namespace Fuel\Alias;
+namespace FuelPHP\Alias;
 
 class Cache
 {
@@ -20,7 +20,7 @@ class Cache
 	protected $format = 'alias';
 
 	/**
-	 * @var  Fuel\Alias\Manager  alias manager
+	 * @var  FuelPHP\Alias\Manager  alias manager
 	 */
 	protected $manager;
 
@@ -45,7 +45,7 @@ class Cache
 	{
 		if ( ! method_exists($this, 'render'.ucfirst($format)))
 		{
-			throw new \InvalidArgumentException('Fuel\\Alias\\Cache rendering method "'.$format.'" does not exist.');
+			throw new \InvalidArgumentException('FuelPHP\\Alias\\Cache rendering method "'.$format.'" does not exist.');
 		}
 
 		$this->format = $format;
@@ -75,7 +75,7 @@ class Cache
 	/**
 	 * Set the alias manager.
 	 *
-	 * @param   Fuel\Alias\Manager  $manager
+	 * @param   FuelPHP\Alias\Manager  $manager
 	 * @return  $this
 	 */
 	public function setManager(Manager $manager)

@@ -1,6 +1,6 @@
 <?php
 
-namespace Fuel\Alias;
+namespace FuelPHP\Alias;
 
 class Manager
 {
@@ -10,7 +10,7 @@ class Manager
 	protected $aliases = array();
 
 	/**
-	 * @var  Fuel\Alias\Cache  $cache  cache handler
+	 * @var  FuelPHP\Alias\Cache  $cache  cache handler
 	 */
 	protected $cache;
 
@@ -125,7 +125,7 @@ class Manager
 	/**
 	 * Set and load alias cache.
 	 *
-	 * @param   Fuel\Alias\Cache|string  $cache   cache handler or cache path
+	 * @param   FuelPHP\Alias\Cache|string  $cache   cache handler or cache path
 	 * @param   string                   $format  cache format
 	 * @return  $this
 	 */

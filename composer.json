@@ -18,7 +18,7 @@
 		"mockery/mockery": "0.7.*"
 	},
 	"autoload": {
-		"psr-0": { "Fuel\\Alias": "src/" }
+		"psr-0": { "FuelPHP\\Alias": "src/" }
 	},
 	"minimum-stability": "dev"
 }
