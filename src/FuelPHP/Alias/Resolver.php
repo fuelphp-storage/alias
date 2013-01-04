@@ -22,6 +22,11 @@ class Resolver
 	protected $translation;
 
 	/**
+	 * @var  bool  $active  flag to prevent recursion when using regex's
+	 */
+	protected $active = false;
+
+	/**
 	 * Constructor
 	 *
 	 * @param  string  $pattern  pattern
@@ -44,10 +49,13 @@ class Resolver
 	public function resolve($alias)
 	{
 		// Check wether the alias matches the pattern
-		if ( ! preg_match($this->regex, $alias, $matches))
+		if ($this->active or ! preg_match($this->regex, $alias, $matches))
 		{
 			return false;
 		}
+
+		// Mark we're busy
+		$this->active = true;
 
 		// Get the translation
 		$translation = $this->translation;
@@ -76,8 +84,11 @@ class Resolver
 		// Check wether the class exists
 		if ( ! $class or ! class_exists($class, true))
 		{
-			return false;
+			$class = false;
 		}
+
+		// Mark we're not busy anymore
+		$this->active = false;
 
 		return $class;
 	}
