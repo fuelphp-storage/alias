@@ -12,8 +12,8 @@ class inheritance injection.
 The package exposes an alias manager which lets you create 3 types of aliases:
 
 * __Literal__<br/>A one-to-one translation. Class "Namespaced\\Classname" translates to "Another\\Classname".
+* __Namespace__<br/>Namespace aliases allow you to alias an entire namespace with one call.
 * __Replacement__<br/>A pattern is matched an through replacements a new class is generated. "Namespace\\*" maps to "Alias\\$1".
-* __Computed__<br/>A callback (Closure or any other callable) computes the new class name. The callback is provides with an array containing the fully namespaced class name segments.
 
 When registering the alias manager append or prepends itself to the autoload stack to act as a pre-processor or fallback. Depending on the amount of aliases and it could be beneficial to alternate between pre- or appending.
 
@@ -22,7 +22,7 @@ By default the manager will prepend itself to the autoloader stack.
 
 ## Basic Usage
 
-```
+```php
 // Create a new alias manager
 $manager = new FuelPHP\Alias\Manager;
 
@@ -41,18 +41,28 @@ $manager->alias(array(
 //
 ```
 
-## Advanced Usage
+## Namespace usage
 
+```php
+$manager->aliasNamespace('Less\Deep', 'Some\Super\Deep\Name\Space');
+// alias to a less deep namespace
+
+
+$manager->aliasNamespace('Some\Space', '');
+// alias a namespace to global
 ```
+
+## Pattern Usage
+
+
+
+```php
 $manager = new FuelPHP\Alias\Manager;
 
 // Alias with wildcards
-$manager->alias('Namespaced\*', 'Other\\$1');
+$manager->aliasPattern('Namespaced\*', 'Other\\$1');
 
-// Or even computed classes
-$manager->alias('*', function($segments){
-	return 'Namespaced\'.reset($segments);
-});
+$Other_Thing = new Namespaced\Thing;
 ```
 
 This can result into class resolving that doesn't exists. Luckily the package is smart enough the check wether the class exists and will continue to look for the correct class if the resolved class does not exist. This is also taken into account when it comes to caching. Only resolved classes that exist will be cached.

@@ -2,6 +2,7 @@
 
 namespace FuelPHP\Alias {
 	class Dummy {}
+	class NsDummy {}
 	class CacheDummy {}
 }
 

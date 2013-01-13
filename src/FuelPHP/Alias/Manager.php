@@ -10,6 +10,11 @@ class Manager
 	protected $aliases = array();
 
 	/**
+	 * @var  array  $patterns  class alias patterns
+	 */
+	protected $patterns = array();
+
+	/**
 	 * @var  array  $namespaces  namespace aliases
 	 */
 	protected $namespaces = array();
@@ -27,11 +32,72 @@ class Manager
 	/**
 	 * Register a class alias
 	 *
+	 * @param   mixed  $from      class from or array of aliases
+	 * @param   mixed  $translation  class translation
+	 * @return  $this
+	 */
+	public function alias($from, $to = null)
+	{
+		if (is_array($from))
+		{
+			$this->aliases = array_merge($this->aliases, $from);
+
+			return $this;
+		}
+
+		$this->aliases[$from] = $to;
+
+		return $this;
+	}
+
+	/**
+	 * Remove an alias
+	 *
+	 * @param   string  $from  alias to remove
+	 * @return  $this
+	 */
+	public function removeAlias($from)
+	{
+		$from = func_get_args();
+
+		foreach ($from as $alias)
+		{
+			if (isset($this->aliases[$alias]))
+			{
+				unset($this->aliases[$alias]);
+			}
+		}
+
+		return $this;
+	}
+
+	/**
+	 * Resolves a plain alias
+	 *
+	 * @param   string   $alias  class alias
+	 * @return  mixed
+	 */
+	public function resolveAlias($alias)
+	{
+		if (isset($this->aliases[$alias]))
+		{
+			$class = $this->aliases[$alias];
+
+			if (class_exists($class, true))
+			{
+				return $class;
+			}
+		}
+	}
+
+	/**
+	 * Register a class alias
+	 *
 	 * @param   mixed  $pattern      class pattern or array of aliases
 	 * @param   mixed  $translation  class translation
 	 * @return  $this
 	 */
-	public function alias($pattern, $translation = null)
+	public function aliasPattern($pattern, $translation = null)
 	{
 		if ( ! is_array($pattern))
 		{
@@ -45,7 +111,7 @@ class Manager
 				$resolver = new Resolver($p, $resolver);
 			}
 
-			$this->aliases[$p] = $resolver;
+			$this->patterns[$p] = $resolver;
 		}
 
 		return $this;
@@ -58,13 +124,13 @@ class Manager
 	 * @param   $translation  optional translation to match
 	 * @return  $this
 	 */
-	public function removeAlias($pattern, $translation = null)
+	public function removeAliasPattern($pattern, $translation = null)
 	{
-		foreach (array_keys($this->aliases) as $i)
+		foreach (array_keys($this->patterns) as $i)
 		{
-			if ($this->aliases[$i]->matches($pattern, $translation))
+			if ($this->patterns[$i]->matches($pattern, $translation))
 			{
-				unset($this->aliases[$i]);
+				unset($this->patterns[$i]);
 			}
 		}
 
@@ -72,19 +138,19 @@ class Manager
 	}
 
 	/**
-	 * Finds the resolver for an alias
+	 * Resolves pattern aliases
 	 *
 	 * @param   string   $alias  class alias
 	 * @return  mixed
 	 */
-	protected function resolveAlias($alias)
+	protected function resolvePatternAlias($alias)
 	{
-		if (isset($this->aliases[$alias]) and $class = $this->aliases[$alias]->resolve($alias))
+		if (isset($this->patterns[$alias]) and $class = $this->patterns[$alias]->resolve($alias))
 		{
 			return $class;
 		}
 
-		foreach ($this->aliases as $resolver)
+		foreach ($this->patterns as $resolver)
 		{
 			if ($class = $resolver->resolve($alias))
 				return $class;
@@ -103,7 +169,7 @@ class Manager
 		$from = trim($from, '\\');
 		$to = trim($to, '\\');
 
-		$this->namespaces[$from] = $to;
+		$this->namespaces[] = array($from, $to);
 
 		return $this;
 	}
@@ -115,15 +181,20 @@ class Manager
 	 * @param   string  $to    to namespace
 	 * @return  $this
 	 */
-	public function removeNamespaceAlias($from, $to)
+	public function removeNamespaceAlias($from)
 	{
-		$from = trim($from, '\\');
-		$to = trim($to, '\\');
+		$from = func_get_args();
 
-		if (isset($this->namespaces[$from]) and $this->namespaces[$from] === $to)
+		print_r($this->namespaces);
+
+		$filter = function($namespace) use ($from)
 		{
-			unset($this->namespaces[$from]);
-		}
+			return ! in_array($namespace[0], $from);
+		};
+
+
+
+		$this->namespaces = array_filter($this->namespaces, $filter);
 
 		return $this;
 	}
@@ -134,10 +205,13 @@ class Manager
 	 * @param   string  $alias  alias
 	 * @return  string  class name when resolved
 	 */
-	public function resolveNamespace($alias)
+	public function resolveNamespaceAlias($alias)
 	{
-		foreach ($this->namespaces as $from => $to)
+		foreach ($this->namespaces as $namespace)
 		{
+			print_r($namespace);
+			list($from, $to) = $namespace;
+
 			if ($empty = empty($to) or strpos($alias, $to) === 0)
 			{
 				if ( ! $empty)
@@ -151,11 +225,6 @@ class Manager
 				if (class_exists($class, true))
 				{
 					array_pop($this->resolving);
-
-					if ($this->cache)
-					{
-						$this->cache->cache($class, $alias);
-					}
 
 					return $class;
 				}
@@ -181,12 +250,22 @@ class Manager
 		// we want to block recursive resolving
 		$this->resolving[] = $alias;
 
-		if ($class = $this->resolveNamespace($alias))
+		if ($class = $this->resolveAlias($alias))
 		{
-			// Let this one fly
+			// We've got a plain alias, now
+			// we can skip the others as this
+			// is the most powerfull one.
 		}
-		// Find the resolver
-		else if ( ! $class = $this->resolveAlias($alias))
+		elseif ($class = $this->resolveNamespaceAlias($alias))
+		{
+			// We've got a namespace alias, we
+			// can skip pattern matching.
+		}
+		// Lastly we'll try to resolve it through
+		// pattern matching. This is the most
+		// expensive match type. Caching is
+		// recommended if you use this.
+		elseif ( ! $class = $this->resolvePatternAlias($alias))
 		{
 			return false;
 		}

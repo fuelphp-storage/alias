@@ -7,7 +7,7 @@ class AliasTests extends PHPUnit_Framework_TestCase
 	public function testLiteral()
 	{
 		$manager = new Manager();
-		$manager->alias('Test','FuelPHP\Alias\Dummy');
+		$manager->alias('Test', 'FuelPHP\Alias\Dummy');
 
 		$this->assertTrue($manager->resolve('Test'));
 		$this->assertFalse($manager->resolve('Unknown'));
@@ -16,7 +16,7 @@ class AliasTests extends PHPUnit_Framework_TestCase
 	public function testMatchedLiteral()
 	{
 		$manager = new Manager();
-		$manager->alias(array(
+		$manager->aliasPattern(array(
 			'Tester\*' => 'FuelPHP\Alias\Dummy',
 		));
 
@@ -27,7 +27,7 @@ class AliasTests extends PHPUnit_Framework_TestCase
 	public function testMatchedReplacement()
 	{
 		$manager = new Manager();
-		$manager->alias(array(
+		$manager->aliasPattern(array(
 			'Test\*' => 'FuelPHP\Alias\$1',
 		));
 
@@ -35,39 +35,11 @@ class AliasTests extends PHPUnit_Framework_TestCase
 		$this->assertFalse($manager->resolve('Test\Unknown'));
 	}
 
-	public function testCallable()
+	public function testNonExistingResolving()
 	{
-		$manager = new Manager();
-		$manager->alias(array(
-			'Tester' => function(){ return 'FuelPHP\Alias\Dummy'; },
-		));
-
-		$this->assertTrue($manager->resolve('Tester'));
-		$this->assertFalse($manager->resolve('Unknown'));
-	}
-
-	public function testMatchedCallable()
-	{
-		$manager = new Manager();
-		$manager->alias(array(
-			'Tester\*' => function(){ return 'FuelPHP\Alias\Dummy'; },
-		));
-
-		$this->assertTrue($manager->resolve('Tester\ThisOtherClass'));
-		$this->assertFalse($manager->resolve('Unknown\ThisClass'));
-	}
-
-	public function testCallableSegments()
-	{
-		$manager = new Manager();
-		$manager->alias(array(
-			'OtherNamespace\*' => function ($segments) {
-				return 'FuelPHP\Alias\\'.reset($segments);
-			},
-		));
-
-		$this->assertTrue($manager->resolve('OtherNamespace\Dummy'));
-		$this->assertFalse($manager->resolve('Test\Unknown'));
+		$manager = new Manager;
+		$manager->alias('ThisClass', 'ToSomethingThatDoesntExist');
+		$this->assertFalse($manager->resolve('ThisClass'));
 	}
 
 	public function testRemoveResolver()
@@ -80,12 +52,30 @@ class AliasTests extends PHPUnit_Framework_TestCase
 			'ResolvableFour' => 'FuelPHP\Alias\Dummy',
 		));
 		$this->assertTrue($manager->resolve('Resolvable'));
-		$manager->removeAlias('ResolvableTwo', 'should not remove resolver');
-		$this->assertTrue($manager->resolve('ResolvableTwo'));
+		$manager->removeAlias('ResolvableTwo');
+		$this->assertFalse($manager->resolve('ResolvableTwo'));
 		$manager->removeAlias('ResolvableThree');
 		$this->assertFalse($manager->resolve('ResolvableThree'));
 		$manager->removeAlias('ResolvableFour', 'FuelPHP\Alias\Dummy');
 		$this->assertFalse($manager->resolve('ResolvableFour'));
+	}
+
+	public function testRemovePatternResolver()
+	{
+		$manager = new Manager();
+		$manager->aliasPattern(array(
+			'PatternResolvable' => 'FuelPHP\Alias\Dummy',
+			'PatternResolvableTwo' => 'FuelPHP\Alias\Dummy',
+			'PatternResolvableThree' => 'FuelPHP\Alias\Dummy',
+			'PatternResolvableFour' => 'FuelPHP\Alias\Dummy',
+		));
+		$this->assertTrue($manager->resolve('PatternResolvable'));
+		$manager->removeAliasPattern('PatternResolvableTwo');
+		$this->assertFalse($manager->resolve('PatternResolvableTwo'));
+		$manager->removeAliasPattern('PatternResolvableThree');
+		$this->assertFalse($manager->resolve('PatternResolvableThree'));
+		$manager->removeAliasPattern('PatternResolvableFour', 'FuelPHP\Alias\Dummy');
+		$this->assertFalse($manager->resolve('PatternResolvableFour'));
 	}
 
 	public function testResolveAutoloader()
@@ -107,24 +97,24 @@ class AliasTests extends PHPUnit_Framework_TestCase
 	public function testStopRecursion()
 	{
 		$manager = new Manager();
-		$manager->alias(array(
+		$manager->aliasPattern(array(
 			'*\*' => '$2\\$1',
-			'*' => '$1',
 		));
+		$manager->aliasPattern('*', '$1');
 		$manager->register();
 		$this->assertFalse($manager->resolve('Unre\Solvable'));
 		$this->assertFalse($manager->resolve('Unresolvable'));
 	}
 
-	public function testTestNamespaceALiasing()
+	public function testTestNamespaceAliasing()
 	{
 		$manager = new Manager();
 
 		$manager->aliasNamespace('FuelPHP\\Alias', '');
 		$manager->aliasNamespace('Some\\Other\\Space', 'Check\\ItOut');
 		$manager->aliasNamespace('Some\\Space', '');
-		$manager->removeNamespaceAlias('Some\\Space', '');
-		$this->assertTrue($manager->resolve('Dummy'));
+		$manager->removeNamespaceAlias('Some\\Space');
+		$this->assertTrue($manager->resolve('NsDummy'));
 		$this->assertTrue($manager->resolve('Check\\ItOut\\AnotherDummy'));
 		$this->assertFalse($manager->resolve('OtherDummy'));
 	}

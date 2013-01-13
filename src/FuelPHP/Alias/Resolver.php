@@ -57,14 +57,7 @@ class Resolver
 		// Get the translation
 		$translation = $this->translation;
 
-		// Resolve closures and other callback types
-		if (is_callable($translation))
-		{
-			array_shift($matches);
-			$class = call_user_func($translation, $matches);
-		}
-		// Resolve plain literal translations
-		elseif (strpos($translation, '$') === false)
+		if (strpos($translation, '$') === false)
 		{
 			$class = $translation;
 		}
