@@ -10,6 +10,11 @@ class Manager
 	protected $aliases = array();
 
 	/**
+	 * @var  array  $namespaces  namespace aliases
+	 */
+	protected $namespaces = array();
+
+	/**
 	 * @var  FuelPHP\Alias\Cache  $cache  cache handler
 	 */
 	protected $cache;
@@ -81,7 +86,80 @@ class Manager
 
 		foreach ($this->aliases as $resolver)
 		{
-			if ($class = $resolver->resolve($alias)) return $class;
+			if ($class = $resolver->resolve($alias))
+				return $class;
+		}
+	}
+
+	/**
+	 * Alias a namespace.
+	 *
+	 * @param   string  $from  from namespace
+	 * @param   string  $to    to namespace
+	 * @return  $this
+	 */
+	public function aliasNamespace($from, $to)
+	{
+		$from = trim($from, '\\');
+		$to = trim($to, '\\');
+
+		$this->namespaces[$from] = $to;
+
+		return $this;
+	}
+
+	/**
+	 * Remove a namespace alias.
+	 *
+	 * @param   string  $from  from namespace
+	 * @param   string  $to    to namespace
+	 * @return  $this
+	 */
+	public function removeNamespaceAlias($from, $to)
+	{
+		$from = trim($from, '\\');
+		$to = trim($to, '\\');
+
+		if (isset($this->namespaces[$from]) and $this->namespaces[$from] === $to)
+		{
+			unset($this->namespaces[$from]);
+		}
+
+		return $this;
+	}
+
+	/**
+	 * Resolve a namespace alias.
+	 *
+	 * @param   string  $alias  alias
+	 * @return  string  class name when resolved
+	 */
+	public function resolveNamespace($alias)
+	{
+		foreach ($this->namespaces as $from => $to)
+		{
+			if ($empty = empty($to) or strpos($alias, $to) === 0)
+			{
+				if ( ! $empty)
+				{
+					$alias = substr($alias, strlen($to));
+				}
+
+				$class = $from.'\\'.$alias;
+				$this->resolving[] = $class;
+
+				if (class_exists($class, true))
+				{
+					array_pop($this->resolving);
+
+					if ($this->cache)
+					{
+						$this->cache->cache($class, $alias);
+					}
+
+					return $class;
+				}
+			}
 		}
 	}
 
@@ -103,11 +181,16 @@ class Manager
 		// we want to block recursive resolving
 		$this->resolving[] = $alias;
 
+		if ($class = $this->resolveNamespace($alias))
+		{
+			// Let this one fly
+		}
 		// Find the resolver
-		if ( ! ($class = $this->resolveAlias($alias)))
+		else if ( ! $class = $this->resolveAlias($alias))
 		{
 			return false;
 		}
+
 		// Remove the resolving class
 		array_pop($this->resolving);
 

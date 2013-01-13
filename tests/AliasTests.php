@@ -1,10 +1,12 @@
 <?php
 
+use FuelPHP\Alias\Manager;
+
 class AliasTests extends PHPUnit_Framework_TestCase
 {
 	public function testLiteral()
 	{
-		$manager = new FuelPHP\Alias\Manager();
+		$manager = new Manager();
 		$manager->alias('Test','FuelPHP\Alias\Dummy');
 
 		$this->assertTrue($manager->resolve('Test'));
@@ -13,7 +15,7 @@ class AliasTests extends PHPUnit_Framework_TestCase
 
 	public function testMatchedLiteral()
 	{
-		$manager = new FuelPHP\Alias\Manager();
+		$manager = new Manager();
 		$manager->alias(array(
 			'Tester\*' => 'FuelPHP\Alias\Dummy',
 		));
@@ -24,7 +26,7 @@ class AliasTests extends PHPUnit_Framework_TestCase
 
 	public function testMatchedReplacement()
 	{
-		$manager = new FuelPHP\Alias\Manager();
+		$manager = new Manager();
 		$manager->alias(array(
 			'Test\*' => 'FuelPHP\Alias\$1',
 		));
@@ -35,7 +37,7 @@ class AliasTests extends PHPUnit_Framework_TestCase
 
 	public function testCallable()
 	{
-		$manager = new FuelPHP\Alias\Manager();
+		$manager = new Manager();
 		$manager->alias(array(
 			'Tester' => function(){ return 'FuelPHP\Alias\Dummy'; },
 		));
@@ -46,7 +48,7 @@ class AliasTests extends PHPUnit_Framework_TestCase
 
 	public function testMatchedCallable()
 	{
-		$manager = new FuelPHP\Alias\Manager();
+		$manager = new Manager();
 		$manager->alias(array(
 			'Tester\*' => function(){ return 'FuelPHP\Alias\Dummy'; },
 		));
@@ -57,7 +59,7 @@ class AliasTests extends PHPUnit_Framework_TestCase
 
 	public function testCallableSegments()
 	{
-		$manager = new FuelPHP\Alias\Manager();
+		$manager = new Manager();
 		$manager->alias(array(
 			'OtherNamespace\*' => function ($segments) {
 				return 'FuelPHP\Alias\\'.reset($segments);
@@ -70,7 +72,7 @@ class AliasTests extends PHPUnit_Framework_TestCase
 
 	public function testRemoveResolver()
 	{
-		$manager = new FuelPHP\Alias\Manager();
+		$manager = new Manager();
 		$manager->alias(array(
 			'Resolvable' => 'FuelPHP\Alias\Dummy',
 			'ResolvableTwo' => 'FuelPHP\Alias\Dummy',
@@ -88,7 +90,7 @@ class AliasTests extends PHPUnit_Framework_TestCase
 
 	public function testResolveAutoloader()
 	{
-		$manager = new FuelPHP\Alias\Manager();
+		$manager = new Manager();
 		$manager->alias(array(
 			'Autoloaded\Dummy' => 'FuelPHP\Alias\Dummy',
 			'Second\Autoloaded\Dummy' => 'FuelPHP\Alias\Dummy',
@@ -104,7 +106,7 @@ class AliasTests extends PHPUnit_Framework_TestCase
 
 	public function testStopRecursion()
 	{
-		$manager = new FuelPHP\Alias\Manager();
+		$manager = new Manager();
 		$manager->alias(array(
 			'*\*' => '$2\\$1',
 			'*' => '$1',
@@ -113,4 +115,18 @@ class AliasTests extends PHPUnit_Framework_TestCase
 		$this->assertFalse($manager->resolve('Unre\Solvable'));
 		$this->assertFalse($manager->resolve('Unresolvable'));
 	}
+
+	public function testTestNamespaceALiasing()
+	{
+		$manager = new Manager();
+
+		$manager->aliasNamespace('FuelPHP\\Alias', '');
+		$manager->aliasNamespace('Some\\Other\\Space', 'Check\\ItOut');
+		$manager->aliasNamespace('Some\\Space', '');
+		$manager->removeNamespaceAlias('Some\\Space', '');
+		$this->assertTrue($manager->resolve('Dummy'));
+		$this->assertTrue($manager->resolve('Check\\ItOut\\AnotherDummy'));
+		$this->assertFalse($manager->resolve('OtherDummy'));
+	}
+
 }

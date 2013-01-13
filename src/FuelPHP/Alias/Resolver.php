@@ -49,13 +49,10 @@ class Resolver
 	public function resolve($alias)
 	{
 		// Check wether the alias matches the pattern
-		if ($this->active or ! preg_match($this->regex, $alias, $matches))
+		if ( ! preg_match($this->regex, $alias, $matches))
 		{
 			return false;
 		}
-
-		// Mark we're busy
-		$this->active = true;
 
 		// Get the translation
 		$translation = $this->translation;
@@ -84,11 +81,8 @@ class Resolver
 		// Check wether the class exists
 		if ( ! $class or ! class_exists($class, true))
 		{
-			$class = false;
+			return false;
 		}
-
-		// Mark we're not busy anymore
-		$this->active = false;
 
 		return $class;
 	}

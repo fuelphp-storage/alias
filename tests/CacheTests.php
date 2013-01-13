@@ -42,6 +42,7 @@ class CacheTests extends PHPUnit_Framework_TestCase
 	{
 		$manager = new Manager;
 		$manager->alias('My\Alias', 'FuelPHP\Alias\Dummy');
+		$manager->aliasNamespace('FuelPHP\\Alias', '');
 		$cache = m::mock('FuelPHP\\Alias\\Cache', function ($cache) use ($manager){
 			$cache->shouldReceive('format')
 				->with('unwind')
@@ -54,10 +55,13 @@ class CacheTests extends PHPUnit_Framework_TestCase
 				->shouldReceive('register')
 				->andReturn($cache)
 				->shouldReceive('cache')
-				->with('FuelPHP\Alias\Dummy', 'My\Alias');
+				->with('FuelPHP\Alias\Dummy', 'My\Alias')
+				->shouldReceive('cache')
+				->with('FuelPHP\\Alias\\CacheDummy', 'CacheDummy');
 		});
 		$manager->cache($cache, 'unwind');
 		$manager->resolve('My\Alias');
+		$manager->resolve('CacheDummy');
 	}
 
 	public function testCacheLoad()
