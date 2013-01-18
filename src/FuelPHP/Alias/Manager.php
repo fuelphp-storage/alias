@@ -185,8 +185,6 @@ class Manager
 	{
 		$from = func_get_args();
 
-		print_r($this->namespaces);
-
 		$filter = function($namespace) use ($from)
 		{
 			return ! in_array($namespace[0], $from);
@@ -209,7 +207,6 @@ class Manager
 	{
 		foreach ($this->namespaces as $namespace)
 		{
-			print_r($namespace);
 			list($from, $to) = $namespace;
 
 			if ($empty = empty($to) or strpos($alias, $to) === 0)
