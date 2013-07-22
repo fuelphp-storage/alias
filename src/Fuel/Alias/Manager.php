@@ -1,6 +1,14 @@
 <?php
+/**
+ * @package    Fuel\Alias
+ * @version    2.0
+ * @author     Fuel Development Team
+ * @license    MIT License
+ * @copyright  2010 - 2013 Fuel Development Team
+ * @link       http://fuelphp.com
+ */
 
-namespace FuelPHP\Alias;
+namespace Fuel\Alias;
 
 class Manager
 {
@@ -20,7 +28,7 @@ class Manager
 	protected $namespaces = array();
 
 	/**
-	 * @var  FuelPHP\Alias\Cache  $cache  cache handler
+	 * @var  Fuel\Alias\Cache  $cache  cache handler
 	 */
 	protected $cache;
 
@@ -284,7 +292,7 @@ class Manager
 	/**
 	 * Set and load alias cache.
 	 *
-	 * @param   FuelPHP\Alias\Cache|string  $cache   cache handler or cache path
+	 * @param   Fuel\Alias\Cache|string  $cache   cache handler or cache path
 	 * @param   string                   $format  cache format
 	 * @return  $this
 	 */
