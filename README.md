@@ -1,6 +1,6 @@
 # FuelPHP\\Alias
 
-[![Build Status](https://travis-ci.org/fuelphp/alias.png?branch=develop)](https://travis-ci.org/fuelphp/alias)
+[![Build Status](https://travis-ci.org/fuelphp/alias.png?branch=master)](https://travis-ci.org/fuelphp/alias)
 
 Library for lazy class aliasing.
 
