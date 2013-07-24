@@ -18,7 +18,8 @@
 		"mockery/mockery": "0.7.*"
 	},
 	"autoload": {
-		"psr-0": { "Fuel\\Alias": "src/" }
+		"psr-0": { "Fuel\\Alias": "src/" },
+		"files": ["src/bootstrap.php"]
 	},
 	"minimum-stability": "dev"
 }
