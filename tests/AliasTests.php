@@ -1,13 +1,13 @@
 <?php
 
-use FuelPHP\Alias\Manager;
+use Fuel\Alias\Manager;
 
 class AliasTests extends PHPUnit_Framework_TestCase
 {
 	public function testLiteral()
 	{
 		$manager = new Manager();
-		$manager->alias('Test', 'FuelPHP\Alias\Dummy');
+		$manager->alias('Test', 'Fuel\Alias\Dummy');
 
 		$this->assertTrue($manager->resolve('Test'));
 		$this->assertFalse($manager->resolve('Unknown'));
@@ -17,7 +17,7 @@ class AliasTests extends PHPUnit_Framework_TestCase
 	{
 		$manager = new Manager();
 		$manager->aliasPattern(array(
-			'Tester\*' => 'FuelPHP\Alias\Dummy',
+			'Tester\*' => 'Fuel\Alias\Dummy',
 		));
 
 		$this->assertTrue($manager->resolve('Tester\ThisClass'));
@@ -28,7 +28,7 @@ class AliasTests extends PHPUnit_Framework_TestCase
 	{
 		$manager = new Manager();
 		$manager->aliasPattern(array(
-			'Test\*' => 'FuelPHP\Alias\$1',
+			'Test\*' => 'Fuel\Alias\$1',
 		));
 
 		$this->assertTrue($manager->resolve('Test\Dummy'));
@@ -46,17 +46,17 @@ class AliasTests extends PHPUnit_Framework_TestCase
 	{
 		$manager = new Manager();
 		$manager->alias(array(
-			'Resolvable' => 'FuelPHP\Alias\Dummy',
-			'ResolvableTwo' => 'FuelPHP\Alias\Dummy',
-			'ResolvableThree' => 'FuelPHP\Alias\Dummy',
-			'ResolvableFour' => 'FuelPHP\Alias\Dummy',
+			'Resolvable' => 'Fuel\Alias\Dummy',
+			'ResolvableTwo' => 'Fuel\Alias\Dummy',
+			'ResolvableThree' => 'Fuel\Alias\Dummy',
+			'ResolvableFour' => 'Fuel\Alias\Dummy',
 		));
 		$this->assertTrue($manager->resolve('Resolvable'));
 		$manager->removeAlias('ResolvableTwo');
 		$this->assertFalse($manager->resolve('ResolvableTwo'));
 		$manager->removeAlias('ResolvableThree');
 		$this->assertFalse($manager->resolve('ResolvableThree'));
-		$manager->removeAlias('ResolvableFour', 'FuelPHP\Alias\Dummy');
+		$manager->removeAlias('ResolvableFour', 'Fuel\Alias\Dummy');
 		$this->assertFalse($manager->resolve('ResolvableFour'));
 	}
 
@@ -64,17 +64,17 @@ class AliasTests extends PHPUnit_Framework_TestCase
 	{
 		$manager = new Manager();
 		$manager->aliasPattern(array(
-			'PatternResolvable' => 'FuelPHP\Alias\Dummy',
-			'PatternResolvableTwo' => 'FuelPHP\Alias\Dummy',
-			'PatternResolvableThree' => 'FuelPHP\Alias\Dummy',
-			'PatternResolvableFour' => 'FuelPHP\Alias\Dummy',
+			'PatternResolvable' => 'Fuel\Alias\Dummy',
+			'PatternResolvableTwo' => 'Fuel\Alias\Dummy',
+			'PatternResolvableThree' => 'Fuel\Alias\Dummy',
+			'PatternResolvableFour' => 'Fuel\Alias\Dummy',
 		));
 		$this->assertTrue($manager->resolve('PatternResolvable'));
 		$manager->removeAliasPattern('PatternResolvableTwo');
 		$this->assertFalse($manager->resolve('PatternResolvableTwo'));
 		$manager->removeAliasPattern('PatternResolvableThree');
 		$this->assertFalse($manager->resolve('PatternResolvableThree'));
-		$manager->removeAliasPattern('PatternResolvableFour', 'FuelPHP\Alias\Dummy');
+		$manager->removeAliasPattern('PatternResolvableFour', 'Fuel\Alias\Dummy');
 		$this->assertFalse($manager->resolve('PatternResolvableFour'));
 	}
 
@@ -82,9 +82,9 @@ class AliasTests extends PHPUnit_Framework_TestCase
 	{
 		$manager = new Manager();
 		$manager->alias(array(
-			'Autoloaded\Dummy' => 'FuelPHP\Alias\Dummy',
-			'Second\Autoloaded\Dummy' => 'FuelPHP\Alias\Dummy',
-			'Third\Autoloaded\Dummy' => 'FuelPHP\Alias\Dummy',
+			'Autoloaded\Dummy' => 'Fuel\Alias\Dummy',
+			'Second\Autoloaded\Dummy' => 'Fuel\Alias\Dummy',
+			'Third\Autoloaded\Dummy' => 'Fuel\Alias\Dummy',
 		));
 		$this->assertFalse(class_exists('Autoloaded\Dummy', true));
 		$this->assertTrue($manager->resolve('Autoloaded\Dummy'));
@@ -110,7 +110,7 @@ class AliasTests extends PHPUnit_Framework_TestCase
 	{
 		$manager = new Manager();
 
-		$manager->aliasNamespace('FuelPHP\\Alias', '');
+		$manager->aliasNamespace('Fuel\\Alias', '');
 		$manager->aliasNamespace('Some\\Other\\Space', 'Check\\ItOut');
 		$manager->aliasNamespace('Some\\Space', '');
 		$manager->removeNamespaceAlias('Some\\Space');
