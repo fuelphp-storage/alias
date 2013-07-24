@@ -1,6 +1,6 @@
 <?php
 
-namespace FuelPHP\Alias {
+namespace Fuel\Alias {
 	class Dummy {}
 	class NsDummy {}
 	class CacheDummy {}
