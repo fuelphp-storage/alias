@@ -221,7 +221,7 @@ class Manager
 			{
 				if ( ! $empty)
 				{
-					$alias = substr($alias, strlen($to));
+					$alias = substr($alias, strlen($to)+1);
 				}
 
 				$class = $from.'\\'.$alias;
