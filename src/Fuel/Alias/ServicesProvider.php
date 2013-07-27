@@ -34,9 +34,10 @@ class ServicesProvider extends ServiceProvider
 	public function provide()
 	{
 		// \Fuel\Alias\Manager
-		$this->register('alias', function ($dic)
+		$this->registerSingleton('alias', function($container)
 		{
-			return new Manager;
+			$manager = new Manager;
+			return $manager->register();
 		});
 	}
 }
