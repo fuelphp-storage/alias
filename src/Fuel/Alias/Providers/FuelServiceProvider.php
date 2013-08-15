@@ -8,20 +8,18 @@
  * @link       http://fuelphp.com
  */
 
-namespace Fuel\Alias;
+namespace Fuel\Alias\Providers;
 
 use Fuel\Dependency\ServiceProvider;
 
 /**
- * ServicesProvider class
- *
- * Defines the services published by this namespace to the DiC
+ * FuelPHP ServiceProvider class for this package
  *
  * @package  Fuel\Alias
  *
  * @since  1.0.0
  */
-class ServicesProvider extends ServiceProvider
+class FuelServiceProvider extends ServiceProvider
 {
 	/**
 	 * @var  array  list of service names provided by this provider
@@ -36,7 +34,7 @@ class ServicesProvider extends ServiceProvider
 		// \Fuel\Alias\Manager
 		$this->registerSingleton('alias', function($container)
 		{
-			$manager = new Manager;
+			$manager = $container->resolve('Fuel\Alias\Manager');
 			return $manager->register();
 		});
 	}
