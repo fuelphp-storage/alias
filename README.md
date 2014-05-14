@@ -24,7 +24,7 @@ By default the manager will prepend itself to the autoloader stack.
 
 ```php
 // Create a new alias manager
-$manager = new FuelPHP\Alias\Manager;
+$manager = new Fuel\Alias\Manager;
 
 // Register the manager
 $manager->register();
@@ -57,7 +57,7 @@ $manager->aliasNamespace('Some\Space', '');
 
 
 ```php
-$manager = new FuelPHP\Alias\Manager;
+$manager = new Fuel\Alias\Manager;
 
 // Alias with wildcards
 $manager->aliasPattern('Namespaced\*', 'Other\\$1');
@@ -74,7 +74,7 @@ In order to get blazing fast aliasing you can enable caching. There are three ty
 All cache is file based and loaded when available when the caching is added to the manager. You can add caching to in the following manner:
 
 ```
-$manager = new FuelPHP\Alias\Manager();
+$manager = new Fuel\Alias\Manager();
 
 $manager->cache(new FuelPHP\Alias\Cache('/path/to/cache.php'));
 /**
@@ -86,10 +86,10 @@ $manager->cache('/path/to/cache', 'unwind');
 // Note the optional .php
 ```
 
-Caching doesn't contain garbage collection as aliases are meant to never expire. It should however be part of your deploy routine to delete the cache files. If you do want a cache routine, feel free to use the `FuelPHP\Alias\Cache::delete` method to remove the cache manually or implemented in your own garbage collection:
+Caching doesn't contain garbage collection as aliases are meant to never expire. It should however be part of your deploy routine to delete the cache files. If you do want a cache routine, feel free to use the `Fuel\Alias\Cache::delete` method to remove the cache manually or implemented in your own garbage collection:
 
 ```
-$cache = new FuelPHP\Alias\Cache('/path/to/cache');
+$cache = new Fuel\Alias\Cache('/path/to/cache');
 
 // Remove the cache
 $cache->delete();
