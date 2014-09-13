@@ -129,7 +129,7 @@ class CacheTest extends Test
 
 	public function testDeleteWithoutFile()
 	{
-		$cache = new Cache('/unknown/location');
+		$cache = new Cache(__DIR__.'/unknown/location');
 		$this->assertTrue($cache->delete());
 	}
 
