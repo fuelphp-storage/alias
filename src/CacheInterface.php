@@ -39,7 +39,7 @@ interface CacheInterface
 	 *
 	 * @param string|null $alias If null then all items are returned.
 	 *
-	 * @return string|false False if the cache item does not exist
+	 * @return string|array|false False if the cache item does not exist
 	 *
 	 * @since 2.0
 	 */
