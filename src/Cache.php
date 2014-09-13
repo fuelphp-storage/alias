@@ -190,6 +190,11 @@ class Cache
 			mkdir($dir, 0777, true);
 		}
 
+		if ( ! file_exists($this->path))
+		{
+			touch($this->path);
+		}
+
 		file_put_contents($this->path, $contents);
 	}
 
