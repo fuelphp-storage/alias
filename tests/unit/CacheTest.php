@@ -1,13 +1,17 @@
 <?php
 
-use Fuel\Alias\Cache;
-use Fuel\Alias\Manager;
+namespace Fuel\Alias;
+
+use Codeception\TestCase\Test;
 use Mockery as m;
 
-class CacheTests extends PHPUnit_Framework_TestCase
+class CacheTest extends Test
 {
+
 	public function setUp()
 	{
+		parent::setUp();
+
 		if (file_exists(__DIR__.'/../cache/cache.php'))
 		{
 			unlink(__DIR__.'/../cache/cache.php');
@@ -16,7 +20,6 @@ class CacheTests extends PHPUnit_Framework_TestCase
 
 	public function tearDown()
 	{
-		m::close();
 		if (file_exists(__DIR__.'/../cache'))
 		{
 			if (file_exists(__DIR__.'/../cache/cache.php'))
@@ -26,10 +29,12 @@ class CacheTests extends PHPUnit_Framework_TestCase
 
 			rmdir(__DIR__.'/../cache');
 		}
+
+		parent::tearDown();
 	}
 
 	/**
-	 * @expectedException  InvalidArgumentException
+	 * @expectedException \InvalidArgumentException
 	 */
 	public function testCacheInvalidFormat()
 	{
@@ -82,11 +87,11 @@ class CacheTests extends PHPUnit_Framework_TestCase
 
 	public function testDelete()
 	{
-		copy(__DIR__.'/../resources/cache.test.php', __DIR__.'/../resources/cache.copy.php');
-		$this->assertTrue(file_exists(__DIR__.'/../resources/cache.copy.php'));
-		$cache = new Cache(__DIR__.'/../resources/cache.copy.php');
+		copy(__DIR__.'/../../resources/cache.test.php', __DIR__.'/../../resources/cache.copy.php');
+		$this->assertTrue(file_exists(__DIR__.'/../../resources/cache.copy.php'));
+		$cache = new Cache(__DIR__.'/../../resources/cache.copy.php');
 		$cache->delete();
-		$this->assertFalse(file_exists(__DIR__.'/../resources/cache.copy.php'));
+		$this->assertFalse(file_exists(__DIR__.'/../../resources/cache.copy.php'));
 	}
 
 	public function testGenerateAlias()
@@ -129,7 +134,7 @@ class CacheTests extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @expectedException InvalidArgumentException
+	 * @expectedException \InvalidArgumentException
 	 */
 	public function testAutoCreateCacheObject()
 	{

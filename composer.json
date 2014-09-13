@@ -15,7 +15,8 @@
 		"php": ">=5.4"
 	},
 	"require-dev": {
-		"mockery/mockery": "0.7.*"
+		"codeception/codeception": "~2.0",
+		"codeception/mockery-module": "dev-master"
 	},
 	"autoload": {
 		"psr-4": { "Fuel\\Alias\\": "src/" }

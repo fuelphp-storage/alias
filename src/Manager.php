@@ -28,7 +28,7 @@ class Manager
 	protected $namespaces = array();
 
 	/**
-	 * @var  Fuel\Alias\Cache  $cache  cache handler
+	 * @var  \Fuel\Alias\Cache  $cache  cache handler
 	 */
 	protected $cache;
 
@@ -128,9 +128,9 @@ class Manager
 	/**
 	 * Remove an alias
 	 *
-	 * @param   string  $pattern  pattern to remove
-	 * @param   $translation  optional translation to match
-	 * @return  $this
+	 * @param  string $pattern     pattern to remove
+	 * @param  string $translation optional translation to match
+	 * @return $this
 	 */
 	public function removeAliasPattern($pattern, $translation = null)
 	{
@@ -292,7 +292,7 @@ class Manager
 	/**
 	 * Set and load alias cache.
 	 *
-	 * @param   Fuel\Alias\Cache|string  $cache   cache handler or cache path
+	 * @param   Cache|string  $cache   cache handler or cache path
 	 * @param   string                   $format  cache format
 	 * @return  $this
 	 */

@@ -1,8 +1,10 @@
 <?php
 
-use Fuel\Alias\Manager;
+namespace Fuel\Alias;
 
-class AliasTests extends PHPUnit_Framework_TestCase
+use Codeception\TestCase\Test;
+
+class AliasTest extends Test
 {
 	public function testLiteral()
 	{
@@ -115,8 +117,16 @@ class AliasTests extends PHPUnit_Framework_TestCase
 		$manager->aliasNamespace('Some\\Space', '');
 		$manager->removeNamespaceAlias('Some\\Space');
 		$this->assertTrue($manager->resolve('NsDummy'));
-		$this->assertTrue($manager->resolve('Check\\ItOut\\AnotherDummy'));
 		$this->assertFalse($manager->resolve('OtherDummy'));
 	}
 
 }
+
+/**
+ * Dummy classes for alias testing
+ */
+class Dummy {}
+
+class NsDummy {}
+
+require __DIR__.'/testNS.php';

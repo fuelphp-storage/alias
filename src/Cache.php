@@ -136,7 +136,7 @@ class Cache
 
 		if ( ! file_exists($path) or ! is_file($path))
 		{
-			$path = __DIR__.'/../../../resources/cache.template.php';
+			$path = __DIR__.'/../resources/cache.template.php';
 		}
 
 		return file_get_contents($path);
