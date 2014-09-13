@@ -17,7 +17,7 @@ use Fuel\Dependency\ServiceProvider;
  *
  * @package  Fuel\Alias
  *
- * @since  1.0.0
+ * @since  2.0
  */
 class FuelServiceProvider extends ServiceProvider
 {
