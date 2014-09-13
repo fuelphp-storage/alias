@@ -1,6 +1,9 @@
 # FuelPHP\\Alias
 
 [![Build Status](https://travis-ci.org/fuelphp/alias.png?branch=master)](https://travis-ci.org/fuelphp/alias)
+[![Code Coverage](https://scrutinizer-ci.com/g/fuelphp/alias/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/fuelphp/alias/?branch=master)
+[![Code Quality](https://scrutinizer-ci.com/g/fuelphp/alias/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/fuelphp/alias/?branch=master)
+[![HHVM Status](http://hhvm.h4cc.de/badge/fuelphp/alias.svg)](http://hhvm.h4cc.de/package/fuelphp/alias)
 
 Library for lazy class aliasing.
 
