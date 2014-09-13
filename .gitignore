@@ -1,7 +1,6 @@
 .DS_Store
 vendor
 coverage
-cache
 composer.lock
 *~
 *.bak
