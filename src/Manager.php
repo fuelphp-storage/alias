@@ -10,6 +10,8 @@
 
 namespace Fuel\Alias;
 
+use Fuel\Alias\Cache\Memory;
+
 class Manager
 {
 
@@ -34,6 +36,22 @@ class Manager
 	protected $resolving = [];
 
 	/**
+	 * @var CacheInterface
+	 */
+	protected $cache;
+
+	public function __construct(CacheInterface $cache = null)
+	{
+		if ($cache === null)
+		{
+			$cache = new Memory;
+		}
+
+		$this->cache = $cache;
+		$this->aliases = $cache->get();
+	}
+
+	/**
 	 * Register a class alias
 	 *
 	 * @param  string|string[] $from Class from or array of aliases
@@ -53,6 +71,7 @@ class Manager
 		}
 
 		$this->aliases[$from] = $to;
+		$this->cache->set($from, $to);
 
 		return $this;
 	}
@@ -75,6 +94,7 @@ class Manager
 			if (isset($this->aliases[$alias]))
 			{
 				unset($this->aliases[$alias]);
+				$this->cache->delete($alias);
 			}
 		}
 
@@ -288,11 +308,16 @@ class Manager
 		// we want to block recursive resolving
 		$this->resolving[] = $alias;
 
-		if ($class = $this->resolveAlias($alias))
+		// TODO: Find a nicer way of doing this. Array of closures perhaps?
+		if ($this->cache->has($alias) && $class = $this->cache->get($alias))
+		{
+			// If we already have the alias in the cache don't bother resolving again
+		}
+		elseif ($class = $this->resolveAlias($alias))
 		{
 			// We've got a plain alias, now
 			// we can skip the others as this
-			// is the most powerfull one.
+			// is the most powerful one.
 		}
 		elseif ($class = $this->resolveNamespaceAlias($alias))
 		{
@@ -311,8 +336,19 @@ class Manager
 		// Remove the resolving class
 		array_pop($this->resolving);
 
+		if ( ! class_exists($class))
+		{
+			return false;
+		}
+
 		// Create the actual alias
 		class_alias($class, $alias);
+
+		// Make sure our alias is stored in the cache for next time
+		if ( ! $this->cache->has($alias))
+		{
+			$this->cache->set($alias, $class);
+		}
 
 		return true;
 	}
