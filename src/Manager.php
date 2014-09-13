@@ -66,7 +66,7 @@ class Manager
 	 *
 	 * @since 2.0
 	 */
-	public function removeAlias($from)
+	public function removeAlias()
 	{
 		$from = func_get_args();
 
@@ -216,7 +216,7 @@ class Manager
 	 *
 	 * @since 2.0
 	 */
-	public function removeNamespaceAlias($from)
+	public function removeNamespaceAlias()
 	{
 		$from = func_get_args();
 
