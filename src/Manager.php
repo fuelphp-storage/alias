@@ -4,7 +4,7 @@
  * @version    2.0
  * @author     Fuel Development Team
  * @license    MIT License
- * @copyright  2010 - 2014 Fuel Development Team
+ * @copyright  2010 - 2015 Fuel Development Team
  * @link       http://fuelphp.com
  */
 
@@ -14,33 +14,35 @@ use Fuel\Alias\Cache\Memory;
 
 class Manager
 {
-
 	/**
-	 * @var array Class aliases
+	 * @var array
 	 */
 	protected $aliases = [];
 
 	/**
-	 * @var Resolver[] Class alias patterns
+	 * @var Resolver[]
 	 */
 	protected $patterns = [];
 
 	/**
-	 * @var array Namespace aliases
+	 * @var array
 	 */
 	protected $namespaces = [];
 
 	/**
-	 * @var array Current classes being resolved
+	 * @var array
 	 */
 	protected $resolving = [];
 
 	/**
-	 * @var CacheInterface
+	 * @var Cache
 	 */
 	protected $cache;
 
-	public function __construct(CacheInterface $cache = null)
+	/**
+	 * @param Cache|null $cache
+	 */
+	public function __construct(Cache $cache = null)
 	{
 		if ($cache === null)
 		{
@@ -52,10 +54,10 @@ class Manager
 	}
 
 	/**
-	 * Register a class alias
+	 * Registers a class alias
 	 *
-	 * @param  string|string[] $from Class from or array of aliases
-	 * @param  string|null     $to   Class translation
+	 * @param string|string[] $from Class from or array of aliases
+	 * @param string|null     $to   Class translation
 	 *
 	 * @return $this
 	 *
@@ -77,7 +79,7 @@ class Manager
 	}
 
 	/**
-	 * Remove an alias
+	 * Removes an alias
 	 *
 	 * @param string|string[] $from Alias to remove
 	 *
@@ -104,7 +106,7 @@ class Manager
 	/**
 	 * Resolves a plain alias
 	 *
-	 * @param  string $alias Class alias to resolve
+	 * @param string $alias Class alias to resolve
 	 *
 	 * @return string|false
 	 *
@@ -126,7 +128,7 @@ class Manager
 	}
 
 	/**
-	 * Register a class alias.
+	 * Registers a class alias
 	 * If $pattern is an array $translation is ignored.
 	 *
 	 * @param string|string[] $pattern     Class pattern or array of aliases
@@ -157,10 +159,10 @@ class Manager
 	}
 
 	/**
-	 * Remove an alias
+	 * Removes an alias pattern
 	 *
-	 * @param  string $pattern     Pattern to remove
-	 * @param  string $translation Optional translation to match
+	 * @param string $pattern     Pattern to remove
+	 * @param string $translation Optional translation to match
 	 *
 	 * @return $this
 	 *
@@ -184,7 +186,7 @@ class Manager
 	 *
 	 * @param string $alias Class alias
 	 *
-	 * @return string|false
+	 * @return string|boolean
 	 *
 	 * @since 2.0
 	 */
@@ -207,7 +209,7 @@ class Manager
 	}
 
 	/**
-	 * Alias a namespace.
+	 * Adds a namespace alias
 	 *
 	 * @param string $from From namespace
 	 * @param string $to   To namespace
@@ -227,7 +229,7 @@ class Manager
 	}
 
 	/**
-	 * Remove a namespace alias.
+	 * Removes a namespace alias
 	 *
 	 * @param string $from From namespace
 	 * @param string $to   To namespace
@@ -251,11 +253,11 @@ class Manager
 	}
 
 	/**
-	 * Resolve a namespace alias.
+	 * Resolves a namespace alias
 	 *
 	 * @param string $alias Alias
 	 *
-	 * @return string|false Class name when resolved
+	 * @return string|boolean Class name when resolved
 	 *
 	 * @since 2.0
 	 */
@@ -288,7 +290,7 @@ class Manager
 	}
 
 	/**
-	 * Resolves an alias.
+	 * Resolves an alias
 	 *
 	 * @param string $alias Class alias
 	 *
@@ -354,9 +356,9 @@ class Manager
 	}
 
 	/**
-	 * Registers the autoloader function.
+	 * Registers the autoloader function
 	 *
-	 * @param bool $placement Register placement, append or prepend
+	 * @param boolean $placement Register placement, append or prepend
 	 *
 	 * @return $this
 	 *

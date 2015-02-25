@@ -10,32 +10,28 @@
 
 namespace Fuel\Alias\Providers;
 
-use Fuel\Dependency\ServiceProvider;
+use League\Container\ServiceProvider;
 
 /**
- * FuelPHP ServiceProvider class for this package
+ * Fuel ServiceProvider class for Alias
  *
- * @package  Fuel\Alias
+ * @package Fuel\Alias
  *
- * @since  2.0
+ * @since 2.0
  */
 class FuelServiceProvider extends ServiceProvider
 {
 	/**
-	 * @var  array  list of service names provided by this provider
+	 * @var array
 	 */
-	public $provides = array('alias');
+	protected $provides = ['alias'];
 
 	/**
-	 * Service provider definitions
+	 * {@inheritdoc}
 	 */
-	public function provide()
+	public function register()
 	{
-		// \Fuel\Alias\Manager
-		$this->registerSingleton('alias', function($container)
-		{
-			$manager = $container->resolve('Fuel\Alias\Manager');
-			return $manager->register();
-		});
+		$this->container->singleton('Fuel\Alias\Manager')
+			->withMethodCall('register');
 	}
 }

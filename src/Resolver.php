@@ -4,7 +4,7 @@
  * @version    2.0
  * @author     Fuel Development Team
  * @license    MIT License
- * @copyright  2010 - 2014 Fuel Development Team
+ * @copyright  2010 - 2015 Fuel Development Team
  * @link       http://fuelphp.com
  */
 
@@ -15,30 +15,28 @@ use Closure;
 class Resolver
 {
 	/**
-	 * @var  string  $regex  pattern regex
+	 * @var string
 	 */
 	protected $regex;
 
 	/**
-	 * @var  string  $pattern  pattern
+	 * @var string $pattern
 	 */
 	protected $pattern;
 
 	/**
-	 * @var  mixed  $translation  string stranslation or callback
+	 * @var string|callable $translation
 	 */
 	protected $translation;
 
 	/**
-	 * @var  bool  $active  flag to prevent recursion when using regex's
+	 * @var boolean
 	 */
 	protected $active = false;
 
 	/**
-	 * Constructor
-	 *
-	 * @param  string  $pattern  pattern
-	 * @param  mixed   $translation  translation
+	 * @param string          $pattern
+	 * @param string|callable $translation
 	 */
 	public function __construct($pattern, $translation)
 	{
@@ -49,10 +47,11 @@ class Resolver
 	}
 
 	/**
-	 * Resolve an alias
+	 * Resolves an alias
 	 *
-	 * @param   string        $alias  alias
-	 * @return  false|string  class when found, otherwise false
+	 * @param string $alias
+	 *
+	 * @return string|boolean
 	 */
 	public function resolve($alias)
 	{
@@ -89,11 +88,11 @@ class Resolver
 	}
 
 	/**
-	 * Returns wether the resolver matches a given pattern
-	 * and optional translation.
+	 * Returns wether the resolver matches a given pattern and optional translation
 	 *
-	 * @param   string   $pattern  pattern
-	 * @param   mixed    $translation  translation
+	 * @param string          $pattern
+	 * @param string|callable $translation
+	 *
 	 * @return  boolean  wether the resolver matches
 	 */
 	public function  matches($pattern, $translation = null)

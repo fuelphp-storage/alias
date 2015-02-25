@@ -4,7 +4,7 @@
  * @version    2.0
  * @author     Fuel Development Team
  * @license    MIT License
- * @copyright  2010 - 2014 Fuel Development Team
+ * @copyright  2010 - 2015 Fuel Development Team
  * @link       http://fuelphp.com
  */
 
@@ -15,13 +15,15 @@ use Fuel\Alias\CacheInterface;
 /**
  * Stores aliased classes in memory
  *
- * @package Fuel\Alias\Cache
+ * @package Fuel\Alias
  *
  * @since 2.0
  */
 class Memory implements CacheInterface
 {
-
+	/**
+	 * @var array
+	 */
 	protected $cache = [];
 
 	/**
@@ -69,5 +71,4 @@ class Memory implements CacheInterface
 
 		return true;
 	}
-
 }

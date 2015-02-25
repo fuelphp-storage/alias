@@ -1,6 +1,5 @@
 {
 	"name": "fuelphp/alias",
-	"type": "library",
 	"description": "Class alias resolving.",
 	"keywords": ["Alias", "Aliassing"],
 	"homepage": "https://github.com/fuelphp/alias",
@@ -19,6 +18,13 @@
 		"codeception/mockery-module": "dev-master"
 	},
 	"autoload": {
-		"psr-4": { "Fuel\\Alias\\": "src/" }
+		"psr-4": {
+			"Fuel\\Alias\\": "src/"
+		}
+	},
+	"extra": {
+		"branch-alias": {
+			"dev-master": "2.0-dev"
+		}
 	}
 }
