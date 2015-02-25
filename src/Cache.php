@@ -13,10 +13,6 @@ namespace Fuel\Alias;
 /**
  * Defines a common interface to allow aliases to be cached.
  * Eventually this will need to be replaced/updated with a PSR-6 implementation once the PSR is accepted.
- *
- * @package Fuel\Alias
- *
- * @since 2.0
  */
 interface Cache
 {

@@ -6,7 +6,6 @@ use Codeception\TestCase\Test;
 
 class MemoryTest extends Test
 {
-
 	/**
 	 * @var Memory
 	 */
@@ -38,5 +37,4 @@ class MemoryTest extends Test
 		$this->assertFalse($this->cache->get($alias));
 		$this->assertEquals([], $this->cache->get());
 	}
-
 }

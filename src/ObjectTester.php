@@ -10,13 +10,6 @@
 
 namespace Fuel\Alias;
 
-/**
- * Test whether an object (class, interface, trait) exists
- *
- * @package Fuel\Alias
- *
- * @since 2.0
- */
 trait ObjectTester
 {
 	/**

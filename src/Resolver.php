@@ -68,7 +68,6 @@ class Resolver
 		{
 			$class = $translation;
 		}
-		// Resolve replacement translations
 		else
 		{
 			// Make sure namespace seperators are escaped
@@ -79,29 +78,24 @@ class Resolver
 		}
 
 		// Check wether the class exists
-		if ( ! $class or ! $this->objectExists($class, true))
+		if ($class and $this->objectExists($class, true))
 		{
-			return false;
+			return $class;
 		}
 
-		return $class;
+		return false;
 	}
 
 	/**
-	 * Returns wether the resolver matches a given pattern and optional translation
+	 * Checks whether the resolver matches a given pattern and optional translation
 	 *
 	 * @param string          $pattern
 	 * @param string|callable $translation
 	 *
-	 * @return  boolean  wether the resolver matches
+	 * @return boolean
 	 */
-	public function  matches($pattern, $translation = null)
+	public function matches($pattern, $translation = null)
 	{
-		if ($this->pattern !== $pattern or ($translation and $translation !== $this->translation))
-		{
-			return false;
-		}
-
-		return true;
+		return $this->pattern === $pattern and (!$translation or $translation === $this->translation);
 	}
 }

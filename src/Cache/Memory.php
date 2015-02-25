@@ -14,10 +14,6 @@ use Fuel\Alias\CacheInterface;
 
 /**
  * Stores aliased classes in memory
- *
- * @package Fuel\Alias
- *
- * @since 2.0
  */
 class Memory implements CacheInterface
 {

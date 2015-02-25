@@ -3,7 +3,7 @@
 namespace Fuel\Alias;
 
 use Codeception\TestCase\Test;
-use Mockery;
+
 
 class AliasTest extends Test
 {

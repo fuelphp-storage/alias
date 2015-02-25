@@ -58,12 +58,8 @@ class Manager
 	/**
 	 * Registers a class alias
 	 *
-	 * @param string|string[] $from Class from or array of aliases
-	 * @param string|null     $to   Class translation
-	 *
-	 * @return $this
-	 *
-	 * @since 2.0
+	 * @param string|string[] $from
+	 * @param string|null     $to
 	 */
 	public function alias($from, $to = null)
 	{
@@ -76,18 +72,12 @@ class Manager
 
 		$this->aliases[$from] = $to;
 		$this->cache->set($from, $to);
-
-		return $this;
 	}
 
 	/**
 	 * Removes an alias
 	 *
-	 * @param string|string[] $from Alias to remove
-	 *
-	 * @return $this
-	 *
-	 * @since 2.0
+	 * @param string|string[] $from
 	 */
 	public function removeAlias()
 	{
@@ -101,29 +91,21 @@ class Manager
 				$this->cache->delete($alias);
 			}
 		}
-
-		return $this;
 	}
 
 	/**
 	 * Resolves a plain alias
 	 *
-	 * @param string $alias Class alias to resolve
+	 * @param string $alias
 	 *
 	 * @return string|boolean
-	 *
-	 * @since 2.0
 	 */
 	public function resolveAlias($alias)
 	{
-		if (isset($this->aliases[$alias]))
+		// Check if alias exists in the store and as an object
+		if (isset($this->aliases[$alias]) and $this->objectExists($this->aliases[$alias], true))
 		{
-			$class = $this->aliases[$alias];
-
-			if ($this->objectExists($class, true))
-			{
-				return $class;
-			}
+			return $this->aliases[$alias];
 		}
 
 		return false;
@@ -133,12 +115,8 @@ class Manager
 	 * Registers a class alias
 	 * If $pattern is an array $translation is ignored.
 	 *
-	 * @param string|string[] $pattern     Class pattern or array of aliases
-	 * @param string|null     $translation Class translation
-	 *
-	 * @return $this
-	 *
-	 * @since 2.0
+	 * @param string|string[] $pattern
+	 * @param string|null     $translation
 	 */
 	public function aliasPattern($pattern, $translation = null)
 	{
@@ -156,19 +134,13 @@ class Manager
 
 			$this->patterns[$patternKey] = $resolver;
 		}
-
-		return $this;
 	}
 
 	/**
 	 * Removes an alias pattern
 	 *
-	 * @param string $pattern     Pattern to remove
-	 * @param string $translation Optional translation to match
-	 *
-	 * @return $this
-	 *
-	 * @since 2.0
+	 * @param string $pattern
+	 * @param string $translation
 	 */
 	public function removeAliasPattern($pattern, $translation = null)
 	{
@@ -179,22 +151,18 @@ class Manager
 				unset($this->patterns[$patternKey]);
 			}
 		}
-
-		return $this;
 	}
 
 	/**
 	 * Resolves pattern aliases
 	 *
-	 * @param string $alias Class alias
+	 * @param string $alias
 	 *
 	 * @return string|boolean
-	 *
-	 * @since 2.0
 	 */
 	protected function resolvePatternAlias($alias)
 	{
-		if (isset($this->patterns[$alias]) && $class = $this->patterns[$alias]->resolve($alias))
+		if (isset($this->patterns[$alias]) and $class = $this->patterns[$alias]->resolve($alias))
 		{
 			return $class;
 		}
@@ -213,12 +181,8 @@ class Manager
 	/**
 	 * Adds a namespace alias
 	 *
-	 * @param string $from From namespace
-	 * @param string $to   To namespace
-	 *
-	 * @return $this
-	 *
-	 * @since 2.0
+	 * @param string $from
+	 * @param string $to
 	 */
 	public function aliasNamespace($from, $to)
 	{
@@ -226,19 +190,12 @@ class Manager
 		$to = trim($to, '\\');
 
 		$this->namespaces[] = [$from, $to];
-
-		return $this;
 	}
 
 	/**
 	 * Removes a namespace alias
 	 *
-	 * @param string $from From namespace
-	 * @param string $to   To namespace
-	 *
-	 * @return $this
-	 *
-	 * @since 2.0
+	 * @param string $from
 	 */
 	public function removeNamespaceAlias()
 	{
@@ -250,8 +207,6 @@ class Manager
 		};
 
 		$this->namespaces = array_filter($this->namespaces, $filter);
-
-		return $this;
 	}
 
 	/**
@@ -260,8 +215,6 @@ class Manager
 	 * @param string $alias Alias
 	 *
 	 * @return string|boolean Class name when resolved
-	 *
-	 * @since 2.0
 	 */
 	public function resolveNamespaceAlias($alias)
 	{
@@ -273,7 +226,7 @@ class Manager
 			{
 				if ( ! $empty)
 				{
-					$alias = substr($alias, strlen($to)+1);
+					$alias = substr($alias, strlen($to) + 1);
 				}
 
 				$class = $from.'\\'.$alias;
@@ -294,11 +247,9 @@ class Manager
 	/**
 	 * Resolves an alias
 	 *
-	 * @param string $alias Class alias
+	 * @param string $alias
 	 *
-	 * @return boolean True if the alias was successful
-	 *
-	 * @since 2.0
+	 * @return boolean
 	 */
 	public function resolve($alias)
 	{
@@ -313,7 +264,7 @@ class Manager
 		$this->resolving[] = $alias;
 
 		// TODO: Find a nicer way of doing this. Array of closures perhaps?
-		if ($this->cache->has($alias) && $class = $this->cache->get($alias))
+		if ($this->cache->has($alias) and $class = $this->cache->get($alias))
 		{
 			// If we already have the alias in the cache don't bother resolving again
 		}
@@ -361,30 +312,19 @@ class Manager
 	 * Registers the autoloader function
 	 *
 	 * @param boolean $placement Register placement, append or prepend
-	 *
-	 * @return $this
-	 *
-	 * @since 2.0
 	 */
 	public function register($placement = 'prepend')
 	{
 		$prepend = ($placement === 'append') ? false : true;
-		spl_autoload_register(array($this, 'resolve'), true, $prepend);
 
-		return $this;
+		spl_autoload_register(array($this, 'resolve'), true, $prepend);
 	}
 
 	/**
 	 * Unregisters the autoloader function.
-	 *
-	 * @return $this
-	 *
-	 * @since 2.0
 	 */
 	public function unregister()
 	{
 		spl_autoload_unregister([$this, 'resolve']);
-
-		return $this;
 	}
 }

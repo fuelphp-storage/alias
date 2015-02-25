@@ -12,10 +12,6 @@ namespace Fuel\Alias;
 
 /**
  * Preserved for BC reasons
- *
- * @package Fuel\Alias
- *
- * @since 2.0
  */
 interface CacheInterface extends Cache
 {
