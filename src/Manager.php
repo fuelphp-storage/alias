@@ -14,6 +14,8 @@ use Fuel\Alias\Cache\Memory;
 
 class Manager
 {
+	use ObjectTester;
+
 	/**
 	 * @var array
 	 */
@@ -108,7 +110,7 @@ class Manager
 	 *
 	 * @param string $alias Class alias to resolve
 	 *
-	 * @return string|false
+	 * @return string|boolean
 	 *
 	 * @since 2.0
 	 */
@@ -118,7 +120,7 @@ class Manager
 		{
 			$class = $this->aliases[$alias];
 
-			if (class_exists($class, true))
+			if ($this->objectExists($class, true))
 			{
 				return $class;
 			}
@@ -277,7 +279,7 @@ class Manager
 				$class = $from.'\\'.$alias;
 				$this->resolving[] = $class;
 
-				if (class_exists($class, true))
+				if ($this->objectExists($class, true))
 				{
 					array_pop($this->resolving);
 
@@ -338,7 +340,7 @@ class Manager
 		// Remove the resolving class
 		array_pop($this->resolving);
 
-		if ( ! class_exists($class))
+		if ( ! $this->objectExists($class))
 		{
 			return false;
 		}

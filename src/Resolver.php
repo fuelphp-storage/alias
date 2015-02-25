@@ -10,10 +10,10 @@
 
 namespace Fuel\Alias;
 
-use Closure;
-
 class Resolver
 {
+	use ObjectTester;
+
 	/**
 	 * @var string
 	 */
@@ -79,7 +79,7 @@ class Resolver
 		}
 
 		// Check wether the class exists
-		if ( ! $class or ! class_exists($class, true))
+		if ( ! $class or ! $this->objectExists($class, true))
 		{
 			return false;
 		}
