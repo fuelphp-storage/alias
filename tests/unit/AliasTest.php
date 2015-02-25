@@ -121,10 +121,11 @@ class AliasTest extends Test
 	public function testTestNamespaceAliasing()
 	{
 		$this->manager->aliasNamespace('Fuel\\Alias', '');
-		$this->manager->aliasNamespace('Some\\Other\\Space', 'Check\\ItOut');
+		$this->manager->aliasNamespace('Check', 'Some\\Other\\Space');
 		$this->manager->aliasNamespace('Some\\Space', '');
 		$this->manager->removeNamespaceAlias('Some\\Space');
 		$this->assertTrue($this->manager->resolve('NsDummy'));
+		$this->assertTrue($this->manager->resolve('Some\\Other\\Space\\ItOut'));
 		$this->assertFalse($this->manager->resolve('OtherDummy'));
 	}
 
