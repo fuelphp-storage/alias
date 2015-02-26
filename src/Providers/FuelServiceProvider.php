@@ -31,7 +31,7 @@ class FuelServiceProvider extends ServiceProvider
 	 */
 	public function register()
 	{
-		$this->container->singleton('Fuel\Alias\Manager')
+		$this->container->singleton('alias', 'Fuel\Alias\Manager')
 			->withMethodCall('register');
 	}
 }
